@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Your Profile — Spendly{% endblock %}
+
+{% block content %}
+
+<section class="profile-hero">
+    <div class="profile-hero-inner">
+        <div class="profile-avatar">{{ initials }}</div>
+
+        <div class="profile-identity">
+            <h1 class="profile-name">{{ user.name }}</h1>
+            <p class="profile-meta">
+                <span>{{ user.email }}</span>
+                <span class="profile-meta-sep">·</span>
+                <span>Member since {{ user.member_since }}</span>
+            </p>
+        </div>
+
+        <div class="profile-hero-stats">
+            <div class="profile-hero-stat">
+                <span class="profile-hero-stat-value">₹{{ "%.2f"|format(stats.total_spent) }}</span>
+                <span class="profile-hero-stat-label">Total spent</span>
+            </div>
+            <div class="profile-hero-stat">
+                <span class="profile-hero-stat-value">{{ stats.transaction_count }}</span>
+                <span class="profile-hero-stat-label">Transactions</span>
+            </div>
+            <div class="profile-hero-stat">
+                <span class="profile-hero-stat-value">{{ stats.top_category }}</span>
+                <span class="profile-hero-stat-label">Top category</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="profile-body">
+    <div class="profile-grid">
+
+        <div class="profile-card">
+            <h2 class="profile-card-title">Category breakdown</h2>
+            <div class="cat-bars">
+                {% for c in categories %}
+                <div class="cat-bar-row">
+                    <div class="cat-bar-top">
+                        <span class="cat-bar-label">{{ c.name }}</span>
+                        <span class="cat-bar-amount">₹{{ "%.2f"|format(c.amount) }}</span>
+                    </div>
+                    <div class="cat-bar-track">
+                        <div class="cat-bar-fill cat-color-{{ category_colors[c.name] }} {{ c.width_class }}"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h2 class="profile-card-title">Recent transactions</h2>
+            <div class="ledger">
+                {% for t in transactions %}
+                <div class="ledger-row">
+                    <span class="ledger-date">{{ t.date }}</span>
+                    <span class="ledger-desc">{{ t.description }}</span>
+                    <span class="cat-badge cat-color-{{ category_colors[t.category] }}">{{ t.category }}</span>
+                    <span class="ledger-amount">₹{{ "%.2f"|format(t.amount) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
